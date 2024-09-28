@@ -5,14 +5,21 @@ st.set_page_config(layout='wide')
 data=pd.read_csv('/workspaces/covid/Covid_Dashboard1.csv')
 
 
+st.markdown("<h1 style='text-align: center;'><u>Covid-19 Cases in India</h1></u><br>", unsafe_allow_html=True)
+
+
+
 expander=st.expander('See data')
 expander.write(data)
 
-st.metric('Total covid cases',data['Total Cases'].sum())
+
+
+
 
 value=data['State/UTs'].unique()
 select=st.selectbox('Select state',(value))
 df=data[data['State/UTs']==select]
+
 
 col1,col2,col3,col4=st.columns(4)
 s1=col1.metric('Total cases',df['Total Cases'].sum())
@@ -26,6 +33,25 @@ col4.metric('Active',df['Active'].sum())
 
 
 
+figs1=px.bar(data,y='Population',x='State/UTs')
+st.plotly_chart(figs1)
+
+cc1,cc2=st.columns(2)
+if cc1.button('Total Cases'):
+  st.write('Total covid cases in India = ',data['Total Cases'].sum())
+  
+
+
+
+if cc2.button('Click zone'):
+   cc2.subheader('Cases by Zone')
+   figs = px.pie(data,values='Total Cases', names='Zone')
+ 
+   cc2.plotly_chart(figs)
+
+
+
+st.markdown("<br><u><h3 style='text-align: center;'>COVID-19 Statistics Dashboard</h3><br></u>", unsafe_allow_html=True)
 
 colu1,colu2=st.columns(2)
 
@@ -97,31 +123,34 @@ co4.dataframe(op_states1)
 
 
 
+st.markdown("<br><u><h3 style='text-align: center;'>COVID-19 Data Visualization</h2></u><br>", unsafe_allow_html=True)
 
 colum1,colum2=st.columns(2)
 
+
 colum1.subheader('Death Ratio')
 #df_reversed = data.iloc[::-1]
-fig=px.bar(data,x='Death Ratio',y='State/UTs',color='Death Ratio',color_continuous_scale='Viridis')
+fig=px.line(data,y='Death Ratio',x='State/UTs')
 colum1.plotly_chart(fig)
 
 colum2.subheader('Recoverer Rate')
 #df_reversed = states1.iloc[::-1]
-bar1 = px.bar(data, y='State/UTs', x='Discharged', title='Recovery Ratio by State (%)',
-color='Death Ratio',color_continuous_scale='Plasma')
+bar1 = px.bar(data, y='State/UTs', x='Discharged',color='Discharged',color_continuous_scale='Viridis')
 colum2.write(bar1)
 
 
 colum3,colum4=st.columns(2)
-#fig1 = px.pie(data,values='Death Ratio', names='Zone', title='Pie Chart Example')
-#colum3.plotly_chart(fig1)
+
 
 colum3.subheader('Active & Death plot')
 fig2=px.bar(data,x='State/UTs',y=['Active','Deaths'],barmode='group',
-color_discrete_sequence=['#1f77b4', '#ff7f0e'])
+color_discrete_sequence=['#D5D68D', '#3357FF'])
 colum3.plotly_chart(fig2) 
 
 colum4.subheader('Cases & Recovery plot')
 fig3=px.bar(data,x='State/UTs',y=['Total Cases','Discharged'],barmode='group',
-color_discrete_sequence=['#28a745', '#dc3545'])
+color_discrete_sequence=['#054105', '#D5D68D'])
 colum4.plotly_chart(fig3) 
+
+
+
