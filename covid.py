@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 st.set_page_config(layout='wide')
-data=pd.read_csv('/workspaces/covid/Covid_Dashboard1.csv')
+data=pd.read_csv('Covid_Dashboard1.csv')
 
 
 st.markdown("<h1 style='text-align: center;'><u>Covid-19 Cases in India</h1></u><br>", unsafe_allow_html=True)
